@@ -1,0 +1,11 @@
+.AccordionContent {
+    display: block;
+    color: black;
+    background-color: white;
+    width: 100%;
+}
+
+.HiddenContent {
+    height: 0;
+    overflow-y: hidden;
+}
