@@ -14,9 +14,6 @@ import AccordionItem from "./components/CompoundAccordion/AccordionItem/accordio
 
 
 function onlyOneItemOpenAtATimeReducer(state: AccordionState, action: AccordionAction) {
-    console.log("reducer triggered")
-    console.log("reducer state", state)
-    console.log("reducer action", action)
     switch (action.type) {
         case AccordionActionType.TOGGLE_INDEX:
             return {openIndexes: [action.payload]}
