@@ -1,67 +1,22 @@
-import React, {useContext, useReducer} from "react";
+import React from "react";
 
-enum AccordionActionType {
-    TOGGLE_INDEX = 'TOGGLE_INDEX'
+
+const Accordion: React.FC = () => {
+    // Im Falle der compound component teilen wir das Accordion in seine Bestandteile auf und erstellen für jeden Teil eine eigene
+    // component (Accordion/Wrapper, AccordionButton, AccordionContent, AccordionItem).
+    // Wir teilen den state der von allen Teilen gebraucht wird über einen React Context. Außerdem stellen wir sicher, dass die components
+    // nur in diesem React context verwendet werden indem wir eine Fehlermeldung konfigurieren, falls Teile des Accordions außerhalb des
+    // Accordion Context verwendet werden.
+
+    // Accordion ist die wrapper component die den Context erzeugt und an die Kind components weitergibt.
+
+    // Im zweiten Schritt wollen wir das Prinzip "Inversion of control" nutzen um den Verwendern der Accordion component die Freiheit zu geben,
+    // den state nach ihren Wünschen zu verändern. Dazu erzeugen wir einen default React Reducer der standardmäßig von der component verwendet wird.
+    // Außerdem geben wir den Nutzern die Möglichkeit einen selbst erstellten Reducer zu verwenden, indem wir diesen über die Parameter der component
+    // annehmen.
+
+    // Außerdem wollen wir die Accordion Funktionalität wiederverwendbar machen indem wir einen custom hook erstellen.
+    return <></>
 }
 
-interface AccordionAction {
-    type: AccordionActionType;
-    payload: number;
-}
-
-interface AccordionState {
-    openIndexes: number[],
-}
-
-interface AccordionProps {
-    reducer?: any,
-    children: React.ReactElement[],
-}
-
-function useAccordion(reducer: (state: AccordionState, action: AccordionAction) => AccordionState){
-    const initialState: AccordionState = {openIndexes: []}
-    const [state, dispatch] = useReducer(reducer, initialState)
-    const toggleIndex = (index: number) => dispatch({type: AccordionActionType.TOGGLE_INDEX, payload: index})
-    return {state, toggleIndex}
-}
-
-function useAccordionContext() {
-    const context = useContext(AccordionContext)
-    if(!context) {
-        throw new Error('This component can only be used within an Accordion')
-    }
-    return context
-}
-
-function accordionReducer(state: AccordionState, action: AccordionAction): AccordionState {
-    switch (action.type) {
-        case AccordionActionType.TOGGLE_INDEX:
-            if(state.openIndexes.includes(action.payload)){
-                return {openIndexes: state.openIndexes.filter((i) => i !== action.payload)}
-            }
-            else {
-               return {openIndexes: [...state.openIndexes, action.payload]}
-            }
-        default:
-            throw new Error('This should never happen')
-    }
-}
-
-interface AccordionContextType {
-    state: AccordionState,
-    toggleIndex: Function,
-}
-
-const AccordionContext = React.createContext<AccordionContextType>({state: {openIndexes: []}, toggleIndex: () => {}})
-
-const Accordion: React.FC<AccordionProps> = ({reducer = accordionReducer, children}: AccordionProps) => {
-    const {state, toggleIndex} = useAccordion(reducer)
-    const accordionItemsWithIndexes: React.ReactElement[] = React.Children.map(children, (child,index) => {
-        return React.cloneElement(child, {index: index})
-    },);
-
-    return <AccordionContext.Provider value={{state: state, toggleIndex: toggleIndex}}>{accordionItemsWithIndexes}</AccordionContext.Provider>
-}
-
-export {Accordion, useAccordionContext, AccordionActionType};
-export type { AccordionState, AccordionAction };
+export {Accordion};
