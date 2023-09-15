@@ -1,5 +1,17 @@
 import React from 'react';
 import './App.css'
+import {Accordion} from "./components/CompoundAccordion/Accordion/accordion.module";
+import AccordionButton from "./components/CompoundAccordion/AccordionButton/accordionButton.module";
+import AccordionContent from "./components/CompoundAccordion/AccordionContent/accordionContent.module";
+
+function onlyOneIndexOpenAtATimeReducer(state: number[], action: { type: string, payload: number }): number[] {
+    switch (action.type) {
+        case 'TOGGLE_INDEX':
+            return [action.payload]
+        default:
+            return state
+    }
+}
 
 const App: React.FC = () => {
     return (
@@ -9,12 +21,21 @@ const App: React.FC = () => {
             </div>
             <div className='container'>
                 <div>
-                    <h2>Parameterized Accordion</h2>
-                    {/*Hier sollte am Ende die parametrisierte component eingebunden werden*/}
-                </div>
-                <div>
                     <h2>Compound Accordion</h2>
-                    {/*Hier sollte am Ende die compound component eingebunden werden.*/}
+                    <Accordion reducer={onlyOneIndexOpenAtATimeReducer}>
+                        <AccordionButton index={0}>
+                            Button 1
+                        </AccordionButton>
+                        <AccordionContent index={0}>
+                            Content 1
+                        </AccordionContent>
+                        <AccordionButton index={1}>
+                            Button 2
+                        </AccordionButton>
+                        <AccordionContent index={1}>
+                            Content 2
+                        </AccordionContent>
+                    </Accordion>
                 </div>
             </div>
         </div>
